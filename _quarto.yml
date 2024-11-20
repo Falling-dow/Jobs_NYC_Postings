@@ -6,11 +6,11 @@ execute:
   echo: true
 
 book:
-  title: "YOUR PROJECT TITLE"
+  title: "NYC_Job_Postings"
   author:
-    - AUTHOR1 (UNI1)
-    - AUTHOR2 (UNI2)
-  repo-url: https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME
+    - Yihan Yang (yy3528)
+    - Mingxuan Wang (mw3824)
+  repo-url: https://github.com/Falling-dow/Jobs_NYC_Postings.git
   date: today
   page-footer:
     right: |

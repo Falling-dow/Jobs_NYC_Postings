@@ -2,22 +2,31 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "YOUR PROJECT TITLE",
+    "title": "NYC_Job_Postings",
     "section": "",
-    "text": "1 Introduction"
+    "text": "1 Introduction\nAs graduate students, many of us are currently exploring job and internship opportunities, so we thought it would be interesting to look into government jobs in New York City. This dataset provides information about job openings on the City of New York’s official jobs site, which includes both internal postings (for city employees) and external ones (open to the public). We want to explore questions like: what kinds of jobs are available in different government departments or sectors, what the salaries look like, and whether most of these jobs are internal or open to everyone. I’m also curious to see what career levels (entry-level, experienced, etc.) are in demand. This project will give us a better understanding of what government job opportunities look like and how accessible they are.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
   },
   {
-    "objectID": "data.html#description",
-    "href": "data.html#description",
+    "objectID": "data.html",
+    "href": "data.html",
     "title": "2  Data",
-    "section": "2.1 Description",
-    "text": "2.1 Description"
+    "section": "",
+    "text": "2.1 Description\nThe data for this project comes from NYC Open Data, specifically the dataset titled “Jobs NYC Postings,” provided by the Department of Citywide Administrative Services (DCAS). This dataset is collected from information on current job postings available on the City of New York’s official jobs site (http://www.nyc.gov/html/careers/html/search/search.shtml), including both internal postings (restricted to city employees) and external postings (open to the public). The data is structured with categorical variables, such as agency/department and job title, and numerical variables, such as the number of positions and salary ranges. It consists of 5,560 rows and 30 columns and is updated weekly, with the most recent update on November 19, 2024. The dataset primarily includes job postings from 2024, which should not cause huge problems since outdated job postings would not be useful for this analysis. Potential issues include some missing or incomplete values that will need to be handled during the data cleaning process. To import the data, I downloaded the CSV file directly from the NYC Open Data portal (https://data.cityofnewyork.us/City-Government/Jobs-NYC-Postings/kpav-sd4t/about_data)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
+    ]
   },
   {
     "objectID": "data.html#missing-value-analysis",
     "href": "data.html#missing-value-analysis",
     "title": "2  Data",
     "section": "2.2 Missing value analysis",
-    "text": "2.2 Missing value analysis"
+    "text": "2.2 Missing value analysis\n\n\nCode\nlibrary(ggplot2)\n\nnyc_jobs &lt;- read.csv(\"/Users/wangmingxuan/Desktop/Jobs_NYC_Postings_20241119.csv\")\n\n# turn empty cells into NA\nnyc_jobs[nyc_jobs == \"\"] &lt;- NA\n\nmissing_counts &lt;- colSums(is.na(nyc_jobs))\nmissing_percentage &lt;- (missing_counts / nrow(nyc_jobs)) * 100\nmissing_data &lt;- data.frame(Column = names(missing_counts), \n                           Missing_Count = missing_counts, \n                           Missing_Percentage = missing_percentage)\n\nmissing_data_only &lt;- subset(missing_data, Missing_Count &gt; 0)\n\n# plot 1: count of missing value for all columns\nggplot(missing_data, \n       aes(x = reorder(Column, -Missing_Count), y = Missing_Count)) +\n  geom_bar(stat = \"identity\", fill = \"skyblue\") +\n  coord_flip() +\n  labs(title = \"Count of Missing Values per Column\", \n       x = \"Columns\", \n       y = \"Count of Missing Values\") +\n  theme_minimal() +\n  theme(\n    axis.text.y = element_text(size = 8, hjust = 1)\n    ) +\n  scale_y_continuous(breaks = seq(0, max(missing_data$Missing_Count), by = 1000)) # Custom x-axis breaks\n\n\n\n\n\n\n\n\n\nCode\n# Second Plot: Pie Chart for Proportion\nmissing_data_only$Proportion &lt;- missing_data_only$Missing_Count / sum(missing_data_only$Missing_Count)\n\nggplot(missing_data_only, aes(x = \"\", y = Proportion, fill = Column)) +\n  geom_bar(stat = \"identity\", width = 1) +\n  coord_polar(\"y\", start = 0) +\n  geom_text(aes(label = paste0(round(Proportion * 100, 1), \"%\")), \n            position = position_stack(vjust = 0.5), \n            color = \"white\", size = 4) +\n  labs(title = \"Proportion of Missing Values by Column\") +\n  theme_void() +\n  theme(legend.title = element_blank())\n\n\n\n\n\n\n\n\n\nFirst graph: Count of Missing Values per Column\nThis bar chart shows the total number of missing values for each column in the dataset, knowing this is important because we’ll need to decide how to handle missing values, especially for columns with a lot of missing data. Specially, the column ‘Recruitment Contact’ has the highest count of missing values, with over 5,000 rows missing. This suggests the data for this column is almost completely unavailable. However, other essential columns like ‘Agency’, ‘Salary Range’, etc don’t have missing value, which is convient for later analysis.\nSecond graph: Proportion of Missing Values by Missing Columns\nThis pie chart shows how much each column contributes to the total missing data, focusing only on columns with missing values. This chart helps us understand the overall impact of missing values from each column, so we can prioritize which ones to clean or exclude based on how much they contribute to the total missing data. Specifically, the “Recruitment Contact” column alone makes up about 23.3% of all missing data, which means it’s the most incomplete column in the dataset.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
+    ]
   }
 ]
