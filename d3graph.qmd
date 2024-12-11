@@ -1,13 +1,162 @@
 # Interactive graph
 
-<style>
-  * {
-    font-family: sans-serif;
-  }
-</style> 
+```{r}
+library(shiny)
+library(shinyjs)
+library(tidyverse)
+library(r2d3)
+library(stringr)
 
-<div id="plot">
-</div>
+# Data preparation
+nyc_jobs_filtered_1 <- nyc_jobs_filtered %>% 
+  mutate(
+    # Grouping job categories into broader merged categories
+    merged_job_category = case_when(
+      grepl("^Administration & Human Resources", Job_Category) ~ "Administration & Human Resources",
+      grepl("^Building Operations & Maintenance", Job_Category) ~ "Building Operations & Maintenance",
+      grepl("^Communications & Intergovernmental Affairs", Job_Category) ~ "Communications & Intergovernmental Affairs",
+      grepl("^Constituent Services & Community Programs", Job_Category) ~ "Constituent Services & Community Programs",
+      grepl("^Engineering, Architecture, & Planning", Job_Category) ~ "Engineering, Architecture, & Planning",
+      grepl("^Finance, Accounting, & Procurement", Job_Category) ~ "Finance, Accounting, & Procurement",
+      grepl("^Green Jobs", Job_Category) ~ "Green Jobs",
+      grepl("^Health", Job_Category) ~ "Health",
+      grepl("^Legal Affairs", Job_Category) ~ "Legal Affairs",
+      grepl("^Policy, Research & Analysis", Job_Category) ~ "Policy, Research & Analysis",
+      grepl("^Public Safety, Inspections, & Enforcement", Job_Category) ~ "Public Safety, Inspections, & Enforcement",
+      grepl("^Social Services", Job_Category) ~ "Social Services",
+      grepl("^Technology, Data & Innovation", Job_Category) ~ "Technology, Data & Innovation",
+      TRUE ~ Job_Category
+    ),
+    # Adjust Residency_Requirement column: classify as "Need" or "Not Need"
+    Residency_Requirement = if_else(str_detect(tolower(Residency_Requirement), "not"), "Not Need", "Need")
+  )
 
-<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-<script src="scripts/myscript.js"></script>
+# Define facet variables
+facet_vars <- c("merged_job_category", "Career_Level", "any_programming_required", 
+                "Residency_Requirement", "Title_Classification")
+
+# Add "N/A" as an option to each facet category
+facet_categories <- lapply(facet_vars, function(fv) {
+  cats <- sort(unique(nyc_jobs_filtered_1[[fv]]))
+  c("N/A", cats)
+})
+names(facet_categories) <- facet_vars
+
+# UI: User interface definition
+ui <- fluidPage(
+  useShinyjs(), # Enable shinyjs for enabling/disabling UI components
+  
+  titlePanel("Interactive D3 Line Chart of NYC Job Posts"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      # Dropdown to select year
+      selectInput("year", "Choose Year:", choices = c("2023", "2024"), selected = "2024"),
+      
+      # Dropdown to select X-axis variable
+      selectInput("xvar", "X-axis Variable:", choices = "Posting_Date", selected = "Posting_Date"),
+      
+      # Multi-select input for facet variables (allows up to 5)
+      selectizeInput("facetvars", "Facet Variables:", choices = facet_vars, multiple = TRUE,
+                     options = list(maxItems = 5)),
+
+      # Display all facet category selectors initially with "N/A" as the default
+      lapply(facet_vars, function(fv) {
+        selectInput(
+          inputId = paste0("category_", fv),
+          label = paste(fv, ":"),
+          choices = facet_categories[[fv]],
+          selected = "N/A"
+        )
+      }),
+
+      # Dropdown to select Y-axis variable
+      selectInput("yvar", "Y-axis Variable:", choices = c("Number of Job Posts", "Median Salary"), 
+                  selected = "Number of Job Posts")
+    ),
+    
+    mainPanel(
+      # Output area for the D3 line chart
+      d3Output("d3plot", height = "600px")
+    )
+  )
+)
+
+# Server: Backend logic
+server <- function(input, output, session) {
+
+  # On startup: set all category selectors to "N/A" and disable them if no facetvars are selected
+  observe({
+    if (is.null(input$facetvars) || length(input$facetvars) == 0) {
+      for (fv in facet_vars) {
+        updateSelectInput(session, paste0("category_", fv), selected = "N/A")
+        disable(paste0("category_", fv))
+      }
+    }
+  })
+  
+  # Enable or disable category selectors based on chosen facet variables
+  observeEvent(input$facetvars, {
+    chosen <- input$facetvars
+    for (fv in facet_vars) {
+      if (fv %in% chosen) {
+        # Enable selector if the facet variable is chosen
+        enable(paste0("category_", fv))
+      } else {
+        # Set to "N/A" and disable if the facet variable is not chosen
+        updateSelectInput(session, paste0("category_", fv), selected = "N/A")
+        disable(paste0("category_", fv))
+      }
+    }
+  })
+
+  # Filter and prepare the data based on user inputs
+  filtered_data <- reactive({
+    req(input$xvar, input$year)
+
+    # Filter data for the selected year
+    df <- nyc_jobs_filtered_1 %>%
+      mutate(Posting_Date = as.Date(Posting_Date, format = "%m/%d/%Y")) %>%
+      filter(format(Posting_Date, "%Y") == input$year) %>%
+      mutate(Posting_Month = as.Date(paste0(input$year, "-", format(Posting_Date, "%m"), "-01")))
+
+    # Apply filters for the selected facet variables (if not "N/A")
+    if (!is.null(input$facetvars) && length(input$facetvars) > 0) {
+      for (fv in input$facetvars) {
+        cat_val <- input[[paste0("category_", fv)]]
+        if (!is.null(cat_val) && cat_val != "N/A") {
+          df <- df %>% filter(.data[[fv]] == cat_val)
+        }
+      }
+    }
+    
+    # Summarize data: group by posting month and calculate job count and median salary
+    df_summary <- df %>%
+      group_by(Posting_Month) %>%
+      summarise(
+        job_count = n(),
+        median_salary = median((Salary_Range_From + Salary_Range_To)/2, na.rm = TRUE)
+      ) %>%
+      ungroup() %>%
+      arrange(Posting_Month)
+
+    df_summary
+  })
+
+  # Render the D3 plot
+  output$d3plot <- renderD3({
+    d3_data <- filtered_data()
+    y_var_name <- if (input$yvar == "Number of Job Posts") "job_count" else "median_salary"
+    
+    r2d3(
+      data = d3_data,
+      script = "scripts/myscript.js", # Path to the external D3 JavaScript script
+      options = list(yvar = y_var_name)
+    )
+  })
+}
+
+# Run the Shiny application
+shinyApp(ui, server)
+```
+
