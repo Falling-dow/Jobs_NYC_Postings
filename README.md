@@ -1,62 +1,73 @@
-This repo contains a [Quarto book](https://quarto.org/docs/books/) template for the EDAV final project.
+# Exploring NYC Government Job Postings
 
-## Follow these instructions carefully
+## Introduction
 
-*If you have any difficulties or have feedback of any kind, please [file an issue](https://github.com/jtr13/quarto-edav-template/issues) or ask questions in the [Discussions](https://github.com/jtr13/quarto-edav-template/discussions) section.*
+In this project, we will examines the `NYC_jobs` dataset, which provides detailed information about job openings posted on the City of New York's official jobs site. 
 
-[Video tutorial](https://www.youtube.com/watch?v=emgS2JI4jCk) (walkthrough of steps below)
-
-### Copy this template (GitHub)
-
-- [ ] 1. Click the green "Use this template" button above and choose "Create a new repository". If you don't see the "Use this template" option, log in to GitHub. DO NOT FORK THE REPO. Choose a descriptive name for your repo, such as "federalbudget" or "AIDSdeaths". (If you change your topic before you do any work, delete the repo and start over.)
-
-- [ ] 2. Leave the setting for viewing the repo as "Public". (Otherwise, we will not be able to access your rendered book.)
-
-- [ ] 3. In the Description field, write "Source files for EDAV final project" then click "Create repository".
-
-### Set up Pages (GitHub)
-
-- [ ] 1. You've now left the template page and are viewing your new repo on GitHub. On the home page, click Settings. Click the "Pages" section on the left. In the Build and Deployment section, set Source to "Deploy from a branch" (Classic Pages experience) and Branch to main with /docs folder. Click Save.
-
-- [ ] 2. Click the little gear button near "About" on the top right side of the home page of the repo and check the "Use your Github Pages website" box under "Website". Click "Save changes". Test the link and you should see a web site with a stick figure on it. It may take a few minutes to build so if it's not working do a few more steps and then come back to check.
-
-### Copy the repo link (GitHub)
-
-- [ ] 1. Click the green Code button, choose "HTTPS" and copy the link below. It should have the format: https&#xfeff;://github.com/[USERNAME]/[REPONAME].git
-
-### Clone the repo (RStudio)
-
-- [ ] 1. Clone your new repo with *File, New Project..., Version Control, Git* in RStudio. You will need to paste the link from the previous step in the Repository URL box. If it's not automatically populated, enter the repo name in the "Project directory name:" box. Choose the location of the project.
-
-### Edit `_quarto.yml` (RStudio)
-
-Tip: From the file pane in RStudio, open `README.md`, which contains these instructions. You can delete steps as you complete them.
-
-- [ ] 1. Change the all caps info in the `title:`, `author:` and `repo-url` fields in the YAML (top) section of `_quarto.yml` to your info. (Note: it's very important to maintain the indenting structure in this file precisely as is -- be careful!)
-
-### Render the book (RStudio)
-
-- [ ] 1. If you haven't already, click "Help" "Check for Updates" to make sure you have the latest version of RStudio (and thus have Quarto installed.)
-
-- [ ] 2. Render the web site locally by clicking the "Build" tap on the right and then "Render Book".
-
-- [ ] 3. Use `browseURL("docs/index.html")` to view your book locally (or just open `docs/index.html` in a browser).
-
-- [ ] 4. If it looks good, commit and push all changed files to GitHub. 
-
-(You will need to repeat steps 2 and 4 every time you wish to update the book on GitHub Pages.)
-
-### Update README (GitHub or RStudio)
-
-- [ ] 1. Delete the content of this **README** and add a short description of your project in its place. If you're working locally, be sure to commit and push the changes to GitHub.
-
-### Optional
-
-- [ ] 1. Choose a theme from [https://bootswatch.com/](https://bootswatch.com/) and replace "cosmo" in `_quarto.yml` with your prefered theme.
-
-### Additional features
-
-Please consult the official guide to **quarto** book websites: [https://quarto.org/docs/books/](https://quarto.org/docs/books/)
+Our main objectives include: 
+- Exploring the accessibility of these jobs to the general public versus city employees.  
+- Understanding the types of jobs available across different government departments. 
+- Analyzing salary trends and career levels in demand. 
 
 
+## Data Description
 
+The dataset used for this analysis is titled `NYC_jobs`, sourced from NYC Open Data and provided by the Department of Citywide Administrative Services (DCAS).  
+
+### Dataset Details: 
+- **Source**: [NYC Open Data Portal](https://data.cityofnewyork.us/City-Government/Jobs-NYC-Postings/kpav-sd4t/about_data) 
+- **Rows**: 5,560 
+- **Columns**: 30 
+- **Last Updated**: November 19, 2024 
+- **Time Frame**: Primarily includes job postings from 2024 
+- **Key Features**:  
+ - **Categorical Variables**: Agency/department, job title, posting type, career level, etc  
+ - **Numerical Variables**: Number of positions, salary range (minimum and maximum).  
+
+Potential challenges with the dataset include missing or incomplete values, which are addressed during the data preprocessing stage. 
+
+## Project Structure  
+ 1. **Data Preprocessing and General Distribution**:   
+- Cleaning the data to address missing values and create additional columns for analysis.    
+- Understanding the general distribution of categorical and numerical variables. 
+
+ 2. **Exploration of Number of Positions**:    
+- Analyzing the number of job positions posted by different government agencies.    
+
+ 3. **Salary Analysis**:   
+- Investigating factors influencing salaries, including career level, programming requirements, and job categories.    
+- Comparing salaries across various government departments and job types.  
+
+---  ## Key Findings  
+1. **Top Agencies by Job Postings**:    
+- The Department of Environmental Protection, Bronx District Attorney, Department of Health/Mental Hygiene, and HRA/Dept of Social Services are the top four agencies with the highest number of job postings. This reflects the city’s focus on critical areas such as environmental protection, public health, and social services.  
+
+2. **Programming Skills and Job Opportunities**:    
+- A slightly higher percentage of positions require programming skills, suggesting that knowledge of programming languages can expand job options. For example, roles requiring back-end or front-end programming offer competitive salaries.  
+
+3. **Salary Trends**:    
+- Higher career levels (e.g., executive and manager roles) are associated with significantly higher median salaries.    
+- Jobs in technical fields, such as Technology, Data & Innovation, offer the highest median salaries, emphasizing the value of technical skills like programming.  
+
+4. **Guidance for Job Seekers**:   
+ - Individuals with specific career goals can use our interactive visualizations to explore job availability and salary trends tailored to their desired fields and career levels.    
+- Those unsure about their future career paths but seeking higher earnings should consider developing technical skills and targeting roles in technology, data, or engineering.  
+
+## Limitations and Future Directions  
+### Limitations: 
+- **Geographical Scope**: The dataset is limited to NYC job postings, which may not represent broader trends in the U.S. 
+- **Time Frame**: The dataset primarily focuses on postings from 2024, limiting the ability to analyze historical trends.  
+
+### Future Directions: 
+- **Expand Data Collection**: Incorporating job postings from previous years and other states could provide a more comprehensive view of job market trends. 
+- **Broaden Scope**: Adding new variables, such as job requirements and benefits, could help deepen the analysis. 
+
+## How to Use This Project  
+1. **Exploration and Visualization**:    
+- Use the included R scripts to explore the dataset and replicate visualizations.    
+
+2. **Interactive Analysis**:    
+- Leverage the interactive D3 visualizations (if implemented) to customize your exploration by job category or career level
+
+3. **Insight Generation**:   
+ - Apply these findings to understand current trends in NYC’s job market and identify skills or fields that align with your career goals.
