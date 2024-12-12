@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; Interactive graph – NYC_Job_Postings</title>
+<title>4&nbsp; Interactive Graph – NYC_Job_Postings</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -81,7 +115,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./d3graph.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interactive graph</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./d3graph.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interactive Graph</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -130,7 +164,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./d3graph.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interactive graph</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interactive Graph</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -152,7 +186,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interactive graph</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interactive Graph</span></h1>
 </div>
 
 
@@ -169,16 +203,164 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<style>
-  * {
-    font-family: sans-serif;
-  }
-</style>
-<div id="plot">
 
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Job Posting Chart</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            flex: 1 1 calc(20% - 20px);
+            min-width: 150px;
+        }
+
+        .control-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        #plot {
+            width: 100%;
+            height: 500px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        #tooltip {
+            position: absolute;
+            background: white;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+            opacity: 0;
+            font-size: 12px;
+        }
+    </style>
+
+
+    <h1>Interactive Job Posting Chart</h1>
+
+    <div class="controls">
+        <!-- Year Selector -->
+        <div class="control-group">
+            <label for="year-select">Select Year:</label>
+            <select id="year-select"></select>
+        </div>
+
+        <!-- Y-axis Selector -->
+        <div class="control-group">
+            <label for="y-axis-select">Y-Axis Variable:</label>
+            <select id="y-axis-select">
+                <option value="job_count">Number of Job Postings</option>
+                <option value="median_salary">Median Salary</option>
+            </select>
+        </div>
+
+        <!-- Category Selectors -->
+        <div class="control-group">
+            <label for="category_merged_job_category">Job Category:</label>
+            <select id="category_merged_job_category">
+                <option value="N/A" selected="">N/A</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="category_Career_Level">Career Level:</label>
+            <select id="category_Career_Level">
+                <option value="N/A" selected="">N/A</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="category_any_programming_required">Programming Required:</label>
+            <select id="category_any_programming_required">
+                <option value="N/A" selected="">N/A</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="category_Residency_Requirement">Residency Requirement:</label>
+            <select id="category_Residency_Requirement">
+                <option value="N/A" selected="">N/A</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="category_Title_Classification">Title Classification:</label>
+            <select id="category_Title_Classification">
+                <option value="N/A" selected="">N/A</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Chart Container -->
+    <div id="plot"></div>
+    <div id="tooltip"></div>
+
+    <script src="scripts/myscript.js" defer=""></script>
+
+
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="st">This interactive graph is designed to help job seekers understand job market trends more clearly. The x-axis represents the months, while users can choose between the number of job postings or the average salary as the y-axis. These are two key factors that job seekers often care about the most.</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="st">To allow deeper insights, the graph includes five additional filter options: job category, career level, residency requirement, title classification, and whether programming skills are required. Users can select and combine any of these filters to see job count or salary trends for specific types of jobs over time.</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="st">Compared to traditional graphs, this version offers a more detailed and focused view of job trends. Users can switch between 2023 and 2024 data and use the five filter categories to refine the results further. By selecting one or multiple filter values, they can explore trends for particular job types.</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="st">The graph is also highly interactive: users can click on dropdown menus to filter data based on specific values, such as choosing certain job categories or career levels. By switching between the y-axis options, they can easily compare trends in job postings and salaries. Users can also move their cursor over any data point to view detailed information, such as the exact number of job postings or salary for that month. This interactivity makes it simple to explore and understand trends in a personalized way, helping job seekers pinpoint the information most relevant to their career goals."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+This interactive graph is designed to help job seekers understand job market trends more clearly. The x-axis represents the months, while users can choose between the number of job postings or the average salary as the y-axis. These are two key factors that job seekers often care about the most.
+
+To allow deeper insights, the graph includes five additional filter options: job category, career level, residency requirement, title classification, and whether programming skills are required. Users can select and combine any of these filters to see job count or salary trends for specific types of jobs over time.
+
+Compared to traditional graphs, this version offers a more detailed and focused view of job trends. Users can switch between 2023 and 2024 data and use the five filter categories to refine the results further. By selecting one or multiple filter values, they can explore trends for particular job types.
+
+The graph is also highly interactive: users can click on dropdown menus to filter data based on specific values, such as choosing certain job categories or career levels. By switching between the y-axis options, they can easily compare trends in job postings and salaries. Users can also move their cursor over any data point to view detailed information, such as the exact number of job postings or salary for that month. This interactivity makes it simple to explore and understand trends in a personalized way, helping job seekers pinpoint the information most relevant to their career goals.</code></pre>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-<script src="scripts/myscript.js"></script>
+</div>
 
 
 

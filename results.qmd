@@ -14,7 +14,7 @@ library(ggplot2)
 library(ggridges)
 library(stringr)
 
-nyc_jobs <- read.csv("/Users/yangyihan/Downloads/Jobs_NYC_Postings.csv")
+nyc_jobs <- read.csv("./Jobs_NYC_Postings.csv")
 
 # replace '.' with '_' in column name
 colnames(nyc_jobs) <- gsub("\\.", "_", colnames(nyc_jobs))
