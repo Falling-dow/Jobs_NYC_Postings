@@ -38,7 +38,7 @@ Potential challenges with the dataset include missing or incomplete values, whic
 - Investigating factors influencing salaries, including career level, programming requirements, and job categories.    
 - Comparing salaries across various government departments and job types.  
 
----  ## Key Findings  
+## Key Findings  
 1. **Top Agencies by Job Postings**:    
 - The Department of Environmental Protection, Bronx District Attorney, Department of Health/Mental Hygiene, and HRA/Dept of Social Services are the top four agencies with the highest number of job postings. This reflects the city’s focus on critical areas such as environmental protection, public health, and social services.  
 
