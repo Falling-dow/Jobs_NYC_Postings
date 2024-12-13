@@ -1,5 +1,5 @@
 ---
-title: "Interactive Graph"
+title: "D3-based Interactive Graph"
 format: html
 resources:
   - data_cleaned.json

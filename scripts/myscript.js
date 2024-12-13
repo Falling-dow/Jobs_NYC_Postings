@@ -1,4 +1,3 @@
-// Wait for the DOM content to fully load before executing
 document.addEventListener("DOMContentLoaded", function () {
     // Set up margins and chart dimensions
     const margin = { top: 20, right: 30, bottom: 50, left: 60 };
