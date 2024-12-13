@@ -9,7 +9,7 @@ The data for this project comes from NYC Open Data, specifically the dataset tit
 ```{r}
 library(ggplot2)
 
-nyc_jobs <- read.csv("/Users/wangmingxuan/Desktop/Jobs_NYC_Postings_20241119.csv")
+nyc_jobs <- read.csv("./Jobs_NYC_Postings.csv")
 
 # turn empty cells into NA
 nyc_jobs[nyc_jobs == ""] <- NA

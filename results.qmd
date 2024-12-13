@@ -14,7 +14,7 @@ library(ggplot2)
 library(ggridges)
 library(stringr)
 
-nyc_jobs <- read.csv("/Users/yangyihan/Downloads/Jobs_NYC_Postings.csv")
+nyc_jobs <- read.csv("./Jobs_NYC_Postings.csv")
 
 # replace '.' with '_' in column name
 colnames(nyc_jobs) <- gsub("\\.", "_", colnames(nyc_jobs))
@@ -141,7 +141,7 @@ programming_summary <- nyc_jobs |>
       no_programming_required ~ "No Programming Required",
       back_end_required & !front_end_required ~ "Back-End\n(R, Python, SQL, Java)",
       front_end_required & !back_end_required ~ "Front-End\n(HTML, CSS, JavaScript)",
-      back_end_required & front_end_required ~ "Both\n(Back-End & Front-End)"
+      back_end_required & front_end_required ~ "Back-End & Front-End(HTML, CSS, JavaScript)"
     )
   ) |> 
   group_by(Programming_Category) |> 
@@ -202,7 +202,7 @@ ggplot(programming_pie_data, aes(x = "", y = Percentage, fill = Programming_Cate
             position = position_stack(vjust = 0.5), size = 4, color = "black")
 ```
 
-Bar chart and pie chart together show the distribution of job positions based on programming language requirements. We can see that a larger number (55.8% + 0.8% = 56.6%) of positions fall under the category of "Required Programming" compared to "No Programming Required(43.4%)" Among the positions requiring programming, the majority specify **Back-End** skills (55.8%) like R, Python, SQL, Java , with a smaller fraction (0.8%) requiring both **Front-End** and **Back-End** programming skills. 
+Bar chart and pie chart together show the distribution of job positions based on programming language requirements. We can see that a larger number (55.8% + 0.8% = 56.6%) of positions fall under the category of "Required Programming" compared to "No Programming Required(43.4%)" Among the positions requiring programming, the majority specify **Back-End** skills (55.8%) like R, Python, SQL, Java , with a smaller fraction (0.8%) requiring both **Front-End** and **Back-End** programming skills. Another insight is that there is no programming relevant government job only requiring front-end programming skills. Thus it is necessary to grasp several common back-end programming skills like python, C++ to search for relevant jobs.
 
 This trend shows the increasing demand for programming skills, especially in back-end technologies, for government job postings. It also highlights the importance of technical skills in today’s job market.
 

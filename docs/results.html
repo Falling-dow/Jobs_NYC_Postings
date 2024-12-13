@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -130,7 +164,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./d3graph.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interactive graph</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">D3-based Interactive Graph</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -144,8 +178,32 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#data-preprocessing" id="toc-data-preprocessing" class="nav-link active" data-scroll-target="#data-preprocessing"><span class="header-section-number">3.1</span> Data Preprocessing</a>
+  <ul class="collapse">
+  <li><a href="#import" id="toc-import" class="nav-link" data-scroll-target="#import"><span class="header-section-number">3.1.1</span> Import</a></li>
+  <li><a href="#drop-irrelevent-columns-from-previous-part" id="toc-drop-irrelevent-columns-from-previous-part" class="nav-link" data-scroll-target="#drop-irrelevent-columns-from-previous-part"><span class="header-section-number">3.1.2</span> Drop irrelevent columns from previous part</a></li>
+  </ul></li>
+  <li><a href="#number-of-job-position-what-type-of-jobs-are-most-available" id="toc-number-of-job-position-what-type-of-jobs-are-most-available" class="nav-link" data-scroll-target="#number-of-job-position-what-type-of-jobs-are-most-available"><span class="header-section-number">3.2</span> Number of Job Position: what type of jobs are most available?</a></li>
+  <li><a href="#what-agencydepartment-has-the-most-job-position" id="toc-what-agencydepartment-has-the-most-job-position" class="nav-link" data-scroll-target="#what-agencydepartment-has-the-most-job-position"><span class="header-section-number">3.3</span> What agency/department has the most job position?</a>
+  <ul class="collapse">
+  <li><a href="#programming-languages-requirement-vs.-number-of-position-slightly-higher-proportion-of-job-position-require-programming-languages" id="toc-programming-languages-requirement-vs.-number-of-position-slightly-higher-proportion-of-job-position-require-programming-languages" class="nav-link" data-scroll-target="#programming-languages-requirement-vs.-number-of-position-slightly-higher-proportion-of-job-position-require-programming-languages"><span class="header-section-number">3.3.1</span> Programming Languages Requirement vs.&nbsp;Number of Position: slightly higher proportion of job position require programming languages</a></li>
+  </ul></li>
+  <li><a href="#exploring-factors-influencing-salaries-career-level-job-category-and-programming-languages" id="toc-exploring-factors-influencing-salaries-career-level-job-category-and-programming-languages" class="nav-link" data-scroll-target="#exploring-factors-influencing-salaries-career-level-job-category-and-programming-languages"><span class="header-section-number">3.4</span> Exploring Factors Influencing Salaries: Career Level, Job Category, and Programming Languages</a>
+  <ul class="collapse">
+  <li><a href="#the-distribution-of-salary-is-unbalanced-and-right-skewed-indicating-some-positions-have-exceptionally-high-salary." id="toc-the-distribution-of-salary-is-unbalanced-and-right-skewed-indicating-some-positions-have-exceptionally-high-salary." class="nav-link" data-scroll-target="#the-distribution-of-salary-is-unbalanced-and-right-skewed-indicating-some-positions-have-exceptionally-high-salary."><span class="header-section-number">3.4.1</span> The distribution of salary is unbalanced and right skewed, indicating some positions have exceptionally high salary.</a></li>
+  <li><a href="#higher-careel-level-tends-to-have-higher-salary-as-well-as-higher-variability-in-salary" id="toc-higher-careel-level-tends-to-have-higher-salary-as-well-as-higher-variability-in-salary" class="nav-link" data-scroll-target="#higher-careel-level-tends-to-have-higher-salary-as-well-as-higher-variability-in-salary"><span class="header-section-number">3.4.2</span> Higher careel level tends to have higher salary as well as higher variability in salary</a></li>
+  </ul></li>
+  <li><a href="#job-category-vs-salary-technology-data-innovation-has-the-highest-median-salaries-while-building-operations-maintenance-fall-at-the-lowest-end-of-the-salary-range" id="toc-job-category-vs-salary-technology-data-innovation-has-the-highest-median-salaries-while-building-operations-maintenance-fall-at-the-lowest-end-of-the-salary-range" class="nav-link" data-scroll-target="#job-category-vs-salary-technology-data-innovation-has-the-highest-median-salaries-while-building-operations-maintenance-fall-at-the-lowest-end-of-the-salary-range"><span class="header-section-number">3.5</span> Job Category vs Salary: “Technology, Data &amp; Innovation” has the highest median salaries, while “Building Operations &amp; Maintenance” fall at the lowest end of the salary range</a>
+  <ul class="collapse">
+  <li><a href="#programming-language-vs.-salary-job-requiring-programming-languages-might-associate-with-higher-salary-salary-75000" id="toc-programming-language-vs.-salary-job-requiring-programming-languages-might-associate-with-higher-salary-salary-75000" class="nav-link" data-scroll-target="#programming-language-vs.-salary-job-requiring-programming-languages-might-associate-with-higher-salary-salary-75000"><span class="header-section-number">3.5.1</span> Programming Language vs.&nbsp;Salary: Job requiring programming languages might associate with higher salary (salary &gt;= $75,000)</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/edit/main/results.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -169,8 +227,623 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>In this section, we aim to address the question: <strong>what factors influence job availability and salary?</strong> Answering this can help improve our chances of finding a satisfactory job. Specifically, we analyze the <code>nyc_jobs</code> dataset, which provides information about government job postings in New York City. Our exploration focuses on understanding the relationships between various factors, such as job category, career level, number of positions posted, and salaries. By examining these variables, we aim to better understand the current job market, particularly for individuals interested in pursuing government careers.</p>
+<section id="data-preprocessing" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="data-preprocessing"><span class="header-section-number">3.1</span> Data Preprocessing</h2>
+<section id="import" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="import"><span class="header-section-number">3.1.1</span> Import</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggridges)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>nyc_jobs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./Jobs_NYC_Postings.csv"</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># replace '.' with '_' in column name</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(nyc_jobs) <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">."</span>, <span class="st">"_"</span>, <span class="fu">colnames</span>(nyc_jobs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>We first import <code>nyc_jobs</code> dataset and relevent packages, and replace ‘.’ with ’_’ in column name.</p>
+</section>
+<section id="drop-irrelevent-columns-from-previous-part" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="drop-irrelevent-columns-from-previous-part"><span class="header-section-number">3.1.2</span> Drop irrelevent columns from previous part</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>nyc_jobs <span class="ot">&lt;-</span> nyc_jobs <span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(To_Apply,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>            Post_Until, </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            Work_Location_1, </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>            Hours_Shift, </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            Recruitment_Contact))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>From the Data section, we identified several columns with missing values. After evaluation, we determined that columns such as <code>To_Apply</code>, <code>Post_Until</code>, <code>Work_Location_1</code>, <code>Hours_Shift</code>, and <code>Recruitment_Contact</code> had too many missing values and were not critical to the objectives of this project. Therefore, we decided to remove them from the dataset to streamline our analysis.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>nyc_jobs <span class="ot">&lt;-</span> nyc_jobs <span class="sc">|&gt;</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uncount</span>(X__Of_Positions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The column <code>X__Of_Positions</code> represents the number of positions posted for a job. To simplify the analysis, we used the <code>uncount()</code> function to expand the dataset. For example, if a job has 3 positions, the dataset will now include 3 identical rows for that job, representing each position individually.</p>
+</section>
+</section>
+<section id="number-of-job-position-what-type-of-jobs-are-most-available" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="number-of-job-position-what-type-of-jobs-are-most-available"><span class="header-section-number">3.2</span> Number of Job Position: what type of jobs are most available?</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nyc_jobs, <span class="fu">aes</span>(<span class="at">x =</span> Posting_Type, <span class="at">fill =</span> Salary_Frequency)) <span class="sc">+</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"salmon"</span>, <span class="st">"orange"</span>, <span class="st">"skyblue"</span>), </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">"Salary Frequency"</span>) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Comparison of External vs Internal by Salary Frequency"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Posting Type"</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Count"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Salary Frequency"</span>) <span class="sc">+</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_grey</span>(<span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the context of government jobs, external jobs (open to the public) and internal jobs (restricted to city employees) have similar numbers. This is somewhat unexpected, as there is often talk about the ‘hidden job market’ within government roles. Most jobs are paid annually, followed by hourly and daily rates.</p>
+<p>In this project, salaries are another key numerical variable. However, since this dataset does not include many specific information about daily or yearly working hours, we will focus exclusively on jobs that pay annually. Thus, we will only keep rows with <code>Salary_Frequency</code> is ‘Annual’.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>nyc_jobs <span class="ot">&lt;-</span> nyc_jobs <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Salary_Frequency <span class="sc">==</span> <span class="st">"Annual"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="what-agencydepartment-has-the-most-job-position" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="what-agencydepartment-has-the-most-job-position"><span class="header-section-number">3.3</span> What agency/department has the most job position?</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check distribution of Agency</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>agency_counts <span class="ot">&lt;-</span> nyc_jobs <span class="sc">|&gt;</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Agency) <span class="sc">|&gt;</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Number_of_Position =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Number_of_Position))</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(agency_counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  Agency                         Number_of_Position
+  &lt;chr&gt;                                       &lt;int&gt;
+1 DEPT OF ENVIRONMENT PROTECTION               1633
+2 BRONX DISTRICT ATTORNEY                      1153
+3 DEPT OF HEALTH/MENTAL HYGIENE                1024
+4 HRA/DEPT OF SOCIAL SERVICES                   978
+5 DEPARTMENT OF TRANSPORTATION                  718
+6 DEPT OF DESIGN &amp; CONSTRUCTION                 704</code></pre>
+</div>
+</div>
+<p>There are 63 distinct agencies, each with a corresponding number of job positions posted. Upon examining the data, we observe that the top 20 agencies have more than 50 job postings, which serves as a reasonable threshold. To simplify the analysis and reduce noise in future visualizations, we will merge agencies with fewer than 50 job postings since 2022 into an “Other” category.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>agency_counts_mutated <span class="ot">&lt;-</span> agency_counts <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Agency =</span> <span class="fu">ifelse</span>(Number_of_Position <span class="sc">&lt;</span> <span class="dv">50</span>, <span class="st">"Other"</span>, Agency)) <span class="sc">|&gt;</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Agency) <span class="sc">|&gt;</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Number_of_Position =</span> <span class="fu">sum</span>(Number_of_Position)) <span class="sc">|&gt;</span> </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Number_of_Position))</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Cleveland dot plot</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(agency_counts_mutated, <span class="fu">aes</span>(<span class="at">x =</span> Number_of_Position, <span class="at">y =</span> <span class="fu">reorder</span>(Agency, Number_of_Position))) <span class="sc">+</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Cleveland Dot Plot of Job Counts by Agency"</span>,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Number_of_Position"</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Agency"</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We now reduced the number of agency to 21 (Top20 + Other), which improves the readability of graph as we can focus on major agencies.</p>
+<p>The agency with the most job positions is the <strong>Department of Environmental Protection</strong>, as it is the top point in the dot plot with the largest count. This is reasonable given the increasing importance of environmental issues, such as climate change and sustainable development, which require a significant workforce to address effectively.</p>
+<p>Following DEP, the <strong>Bronx District Attorney</strong>, the <strong>Department of Health/Mental Hygiene</strong>, and the <strong>HRA/Dept of Social Services</strong> also have significant job postings, each with around or above 1,000 positions. These are also reasonable as the Bronx District Attorney might manages a high volume of legal cases, which requires substantial staffing. The Department of Health/Mental Hygiene need to deal with public health challenges, while HRA/Dept of Social Services need to focuses on essential support services related to social welfare.</p>
+<p>The “Other” category includes numerous small agencies that collectively account for a notable but less significant portion of the job postings.</p>
+<section id="programming-languages-requirement-vs.-number-of-position-slightly-higher-proportion-of-job-position-require-programming-languages" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="programming-languages-requirement-vs.-number-of-position-slightly-higher-proportion-of-job-position-require-programming-languages"><span class="header-section-number">3.3.1</span> Programming Languages Requirement vs.&nbsp;Number of Position: slightly higher proportion of job position require programming languages</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define back-end and front-end</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>back_end_skills <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"R"</span>, <span class="st">"Python"</span>, <span class="st">"Java"</span>, <span class="st">"SQL"</span>, <span class="st">"C</span><span class="sc">\\</span><span class="st">+</span><span class="sc">\\</span><span class="st">+"</span>, <span class="st">"C</span><span class="sc">\\</span><span class="st">b"</span>, <span class="st">"Go"</span>, <span class="st">"Ruby"</span>, <span class="st">"Perl"</span>, <span class="st">"C#"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>front_end_skills <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"HTML"</span>, <span class="st">"CSS"</span>, <span class="st">"JavaScript"</span>, <span class="st">"TypeScript"</span>, <span class="st">"React"</span>, <span class="st">"Angular"</span>, <span class="st">"Vue"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>skill_labels <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Back_End"</span> <span class="ot">=</span> <span class="st">"Back-End</span><span class="sc">\n</span><span class="st">(R, Python, SQL, Java)"</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Front_End"</span> <span class="ot">=</span> <span class="st">"Front-End</span><span class="sc">\n</span><span class="st">(HTML, CSS, JavaScript)"</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Any_Programming"</span> <span class="ot">=</span> <span class="st">"Any Programming</span><span class="sc">\n</span><span class="st">(Back-End or Front-End)"</span>,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"No_Programming"</span> <span class="ot">=</span> <span class="st">"No Programming</span><span class="sc">\n</span><span class="st">Required"</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co"># add programming skill column</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>nyc_jobs <span class="ot">&lt;-</span> nyc_jobs <span class="sc">|&gt;</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Preferred_Skills =</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(Preferred_Skills), <span class="st">""</span>, Preferred_Skills)) <span class="sc">|&gt;</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">back_end_required =</span> <span class="fu">str_detect</span>(Preferred_Skills, </span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>                                   <span class="fu">regex</span>(<span class="fu">paste</span>(back_end_skills, <span class="at">collapse =</span> <span class="st">"|"</span>), </span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">front_end_required =</span> <span class="fu">str_detect</span>(Preferred_Skills, </span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">regex</span>(<span class="fu">paste</span>(front_end_skills, <span class="at">collapse =</span> <span class="st">"|"</span>), </span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">any_programming_required =</span> back_end_required <span class="sc">|</span> front_end_required,</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">no_programming_required =</span> <span class="sc">!</span>any_programming_required</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>programming_summary <span class="ot">&lt;-</span> nyc_jobs <span class="sc">|&gt;</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">Programming_Category =</span> <span class="fu">case_when</span>(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>      no_programming_required <span class="sc">~</span> <span class="st">"No Programming Required"</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>      back_end_required <span class="sc">&amp;</span> <span class="sc">!</span>front_end_required <span class="sc">~</span> <span class="st">"Back-End</span><span class="sc">\n</span><span class="st">(R, Python, SQL, Java)"</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>      front_end_required <span class="sc">&amp;</span> <span class="sc">!</span>back_end_required <span class="sc">~</span> <span class="st">"Front-End</span><span class="sc">\n</span><span class="st">(HTML, CSS, JavaScript)"</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>      back_end_required <span class="sc">&amp;</span> front_end_required <span class="sc">~</span> <span class="st">"Back-End &amp; Front-End(HTML, CSS, JavaScript)"</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Programming_Category) <span class="sc">|&gt;</span> </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Programming_Type =</span> <span class="fu">case_when</span>(</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>      Programming_Category <span class="sc">==</span> <span class="st">"No Programming Required"</span> <span class="sc">~</span> <span class="st">"No Programming Required"</span>,</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Required Programming"</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(programming_summary, <span class="fu">aes</span>(<span class="at">x =</span> Programming_Type, <span class="at">y =</span> Count, <span class="at">fill =</span> Programming_Category)) <span class="sc">+</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"stack"</span>) <span class="sc">+</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"salmon"</span>, <span class="st">"skyblue"</span>, <span class="st">"orange"</span>), </span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>                    <span class="at">name =</span> <span class="st">"Programming_Category"</span>) <span class="sc">+</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Programming Language Requirements"</span>,</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Programming Requirement"</span>,</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Number of Jobs"</span>,</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Programming Category"</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">0</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>, <span class="at">lineheight =</span> <span class="dv">1</span>), </span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.key.height =</span> <span class="fu">unit</span>(<span class="fl">1.5</span>, <span class="st">"lines"</span>)</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>programming_pie_data <span class="ot">&lt;-</span> programming_summary <span class="sc">|&gt;</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Percentage =</span> Count <span class="sc">/</span> <span class="fu">sum</span>(Count) <span class="sc">*</span> <span class="dv">100</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(programming_pie_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> Percentage, <span class="at">fill =</span> Programming_Category)) <span class="sc">+</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">width =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="st">"y"</span>, <span class="at">start =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Programming Skills in NYC Job Postings"</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Skill Type"</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"salmon"</span>, <span class="st">"skyblue"</span>, <span class="st">"orange"</span>), </span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>                    <span class="at">name =</span> <span class="st">"Skill Type"</span>) <span class="sc">+</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_grey</span>() <span class="sc">+</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">13</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.key.height =</span> <span class="fu">unit</span>(<span class="fl">1.5</span>, <span class="st">"lines"</span>)</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(<span class="fu">round</span>(Percentage, <span class="dv">1</span>), <span class="st">"%"</span>)), </span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="fl">0.5</span>), <span class="at">size =</span> <span class="dv">4</span>, <span class="at">color =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Bar chart and pie chart together show the distribution of job positions based on programming language requirements. We can see that a larger number (55.8% + 0.8% = 56.6%) of positions fall under the category of “Required Programming” compared to “No Programming Required(43.4%)” Among the positions requiring programming, the majority specify <strong>Back-End</strong> skills (55.8%) like R, Python, SQL, Java , with a smaller fraction (0.8%) requiring both <strong>Front-End</strong> and <strong>Back-End</strong> programming skills. Another insight is that there is no programming relevant government job only requiring front-end programming skills. Thus it is necessary to grasp several common back-end programming skills like python, C++ to search for relevant jobs.</p>
+<p>This trend shows the increasing demand for programming skills, especially in back-end technologies, for government job postings. It also highlights the importance of technical skills in today’s job market.</p>
+</section>
+</section>
+<section id="exploring-factors-influencing-salaries-career-level-job-category-and-programming-languages" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="exploring-factors-influencing-salaries-career-level-job-category-and-programming-languages"><span class="header-section-number">3.4</span> Exploring Factors Influencing Salaries: Career Level, Job Category, and Programming Languages</h2>
+<p>Another variable that we are interested in is salaries. Specifically, we are want to learn about factors that contribute to higher salary. In the following section, we will explore the influence of candidates’ skill set, career level, job category on salary.</p>
+<section id="the-distribution-of-salary-is-unbalanced-and-right-skewed-indicating-some-positions-have-exceptionally-high-salary." class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="the-distribution-of-salary-is-unbalanced-and-right-skewed-indicating-some-positions-have-exceptionally-high-salary."><span class="header-section-number">3.4.1</span> The distribution of salary is unbalanced and right skewed, indicating some positions have exceptionally high salary.</h3>
+<p>We first add <code>Median_Salary</code> to the dataset, which is calculated by median salary = (Salary_Range_From + Salary_Range_To) / 2, then check the distribution of <code>Median_Salary</code></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add the Median_Salary column</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>nyc_jobs <span class="ot">&lt;-</span> nyc_jobs <span class="sc">|&gt;</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Median_Salary =</span> (Salary_Range_From <span class="sc">+</span> Salary_Range_To) <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nyc_jobs, <span class="fu">aes</span>(<span class="at">sample =</span> Median_Salary)) <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_qq</span>() <span class="sc">+</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_qq_line</span>(<span class="at">color =</span> <span class="st">"salmon"</span>) <span class="sc">+</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"QQ Plot of Median Salary Distribution"</span>,</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Theoretical Quantiles"</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Sample Quantiles"</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">16</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nyc_jobs, <span class="fu">aes</span>(<span class="at">x =</span> Median_Salary)) <span class="sc">+</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">20</span>, </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"skyblue"</span>, </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">"black"</span>, </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">"salmon"</span>, <span class="at">size =</span> <span class="fl">1.2</span>, <span class="at">adjust =</span> <span class="dv">2</span>) <span class="sc">+</span> </span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dnorm, </span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="fu">mean</span>(nyc_jobs<span class="sc">$</span>Median_Salary, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">sd =</span> <span class="fu">sd</span>(nyc_jobs<span class="sc">$</span>Median_Salary, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">"steelblue"</span>,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>                <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span> <span class="co"># Normal curve</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma,</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(nyc_jobs<span class="sc">$</span>Median_Salary, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">by =</span> <span class="dv">50000</span>)) <span class="sc">+</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Histogram of Median Salary with Density and Normal Curve"</span>,</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Median Salary"</span>,</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Density"</span>,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"Red line: Density Curve | Blue line: Normal Curve"</span>) <span class="sc">+</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+ℹ Please use `linewidth` instead.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The QQ plot shows that the distribution of Median Salary is not normal but right skewed. We can also confirm this idea from histogram of median salary with density curve(red) and normal curve(blue). The unbalanced distribution of median salary implies that we need to explore different variables that might potentially explain why salary varies a lot across different job position, and why the distribution is right skewed with long tails (i.e.&nbsp;job position with exceptionally high salary)</p>
+</section>
+<section id="higher-careel-level-tends-to-have-higher-salary-as-well-as-higher-variability-in-salary" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="higher-careel-level-tends-to-have-higher-salary-as-well-as-higher-variability-in-salary"><span class="header-section-number">3.4.2</span> Higher careel level tends to have higher salary as well as higher variability in salary</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Unique career levels</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Career_Level includes:"</span>, <span class="fu">paste</span>(<span class="fu">unique</span>(nyc_jobs<span class="sc">$</span>Career_Level), <span class="at">collapse =</span> <span class="st">", "</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Career_Level includes: Entry-Level, Experienced (non-manager), Manager, Executive </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Levels of career levels</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Career_Level has levels:"</span>, <span class="fu">paste</span>(<span class="fu">levels</span>(nyc_jobs<span class="sc">$</span>Career_Level), <span class="at">collapse =</span> <span class="st">", "</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Career_Level has levels:  </code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>nyc_jobs <span class="ot">&lt;-</span> nyc_jobs <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Career_Level =</span> <span class="fu">factor</span>(Career_Level, </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                               <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Entry-Level"</span>, </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">"Experienced (non-manager)"</span>, </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">"Manager"</span>, </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">"Executive"</span>)))</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"After setting levels, Career_Level has levels:"</span>, <span class="fu">paste</span>(<span class="fu">levels</span>(nyc_jobs<span class="sc">$</span>Career_Level), <span class="at">collapse =</span> <span class="st">", "</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>After setting levels, Career_Level has levels: Entry-Level, Experienced (non-manager), Manager, Executive </code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>salary_data_long <span class="ot">&lt;-</span> nyc_jobs <span class="sc">|&gt;</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Career_Level, Salary_Range_From, Salary_Range_To) <span class="sc">|&gt;</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(Salary_Range_From, Salary_Range_To), </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"Salary_Type"</span>, </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"Salary"</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(salary_data_long, <span class="fu">aes</span>(<span class="at">x =</span> Salary, <span class="at">y =</span> Career_Level, <span class="at">fill =</span> Salary_Type)) <span class="sc">+</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density_ridges</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">scale =</span> <span class="fl">0.8</span>, <span class="at">bandwidth =</span> <span class="dv">15000</span>) <span class="sc">+</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"salmon"</span>, <span class="st">"skyblue"</span>), </span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>                    <span class="at">name =</span> <span class="st">"Salary_Type"</span>) <span class="sc">+</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Density Distribution of Salary Ranges by Career Level"</span>,</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Salary"</span>,</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Career Level"</span>,</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Salary Type"</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_grey</span>() <span class="sc">+</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>“Entry-level” and “Experienced (non-manager)” positions show relatively narrow salary distributions, with most salaries concentrated below $100,000. However, “Experienced (non-manager)” positions exhibit a slightly right-skewed ending salary distribution, indicating higher variability at the upper end. In contrast, “Manager” and “Executive” roles display significantly wider salary distributions. “Manager” salaries typically start between $50,000 and $100,000 and extend to around $100,000 to $200,000. At the “Executive” level, salaries are notably higher, with distributions heavily skewed toward the upper range, often surpassing $200,000.</p>
+<p>Overall, “Entry-level” and “Experienced (non-manager)” roles tend to have more concentrated salary ranges, while “Manager” and “Executive” positions show higher salaries and greater variability.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a box plot for Median_Salary by Career_Level</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nyc_jobs, <span class="fu">aes</span>(<span class="at">x =</span> Career_Level, <span class="at">y =</span> Median_Salary)) <span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Box Plot of Median Salary by Career Level"</span>,</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Career Level"</span>,</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Median Salary"</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_grey</span>() <span class="sc">+</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">0</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This box plot provides a visual comparison of the Median_Salary across different career levels. It demonstrates that “Entry-Level” and “Experienced (non-manager)” positions have relatively concentrated salary ranges, with median salaries mostly below $100,000 and fewer outliers. In contrast, “Manager” and “Executive” positions exhibit much higher salary ranges and greater variability. Median salaries for “Manager” positions fall around $125,000, with IQRs extending higher and notable outliers pushing beyond $200,000. “Executive” roles, as expected, show the highest median salaries and the widest IQR, with 25% of the salaries data exceeding $200,000.</p>
+<p>This pattern confirms the earlier conclusion that “Entry-Level” and “Experienced (non-manager)” position have lower salary and more concentrated salary distribution, while “Manager” and “Executive” roles not only offer higher pay but also greater variability in salary.</p>
+</section>
+</section>
+<section id="job-category-vs-salary-technology-data-innovation-has-the-highest-median-salaries-while-building-operations-maintenance-fall-at-the-lowest-end-of-the-salary-range" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="job-category-vs-salary-technology-data-innovation-has-the-highest-median-salaries-while-building-operations-maintenance-fall-at-the-lowest-end-of-the-salary-range"><span class="header-section-number">3.5</span> Job Category vs Salary: “Technology, Data &amp; Innovation” has the highest median salaries, while “Building Operations &amp; Maintenance” fall at the lowest end of the salary range</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>category_counts <span class="ot">&lt;-</span> nyc_jobs <span class="sc">|&gt;</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Job_Category) <span class="sc">|&gt;</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Job_Category)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(category_counts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  Job_Category                                                             Count
+  &lt;chr&gt;                                                                    &lt;int&gt;
+1 Administration &amp; Human Resources                                           297
+2 Administration &amp; Human Resources Building Operations &amp; Maintenance           8
+3 Administration &amp; Human Resources Building Operations &amp; Maintenance Poli…     2
+4 Administration &amp; Human Resources Communications &amp; Intergovernmental Aff…    13
+5 Administration &amp; Human Resources Communications &amp; Intergovernmental Aff…     1
+6 Administration &amp; Human Resources Communications &amp; Intergovernmental Aff…     2</code></pre>
+</div>
+</div>
+<p>We see that there are 177 unique job category. As we look into the table, we discover that there are job categories with similar names, often structured as a main job category with the highest count and other minor job categories that share similar names but fall under different branches or combinations. For example, “Administration &amp; Human Resources” appears as a standalone category with a significant number of postings, but variations such as “Administration &amp; Human Resources Building Operations &amp; Maintenance” and “Administration &amp; Human Resources Communications &amp; Intergovernmental Affairs” indicate subsets of the primary category under specific functional areas.</p>
+<p>To simplify the analysis, we will merge the sub-job categories into their corresponding main job categories. For example, the above two variations will be merged under the main category “Administration &amp; Human Resources.” This merging helps reduce redundancy so that we can have a more accurate representation of the overall job categories.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge job categories</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>nyc_jobs <span class="ot">&lt;-</span> nyc_jobs <span class="sc">|&gt;</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Merged_Job_Category =</span> <span class="fu">case_when</span>(</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">grepl</span>(<span class="st">"^Administration &amp; Human Resources"</span>, Job_Category) <span class="sc">~</span> <span class="st">"Administration &amp; Human Resources"</span>,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">grepl</span>(<span class="st">"^Building Operations &amp; Maintenance"</span>, Job_Category) <span class="sc">~</span> <span class="st">"Building Operations &amp; Maintenance"</span>,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">grepl</span>(<span class="st">"^Communications &amp; Intergovernmental Affairs"</span>, Job_Category) <span class="sc">~</span> <span class="st">"Communications &amp; Intergovernmental Affairs"</span>,</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">grepl</span>(<span class="st">"^Constituent Services &amp; Community Programs"</span>, Job_Category) <span class="sc">~</span> <span class="st">"Constituent Services &amp; Community Programs"</span>,</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">grepl</span>(<span class="st">"^Engineering, Architecture, &amp; Planning"</span>, Job_Category) <span class="sc">~</span> <span class="st">"Engineering, Architecture, &amp; Planning"</span>,</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">grepl</span>(<span class="st">"^Finance, Accounting, &amp; Procurement"</span>, Job_Category) <span class="sc">~</span> <span class="st">"Finance, Accounting, &amp; Procurement"</span>,</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">grepl</span>(<span class="st">"^Green Jobs"</span>, Job_Category) <span class="sc">~</span> <span class="st">"Green Jobs"</span>,</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">grepl</span>(<span class="st">"^Health"</span>, Job_Category) <span class="sc">~</span> <span class="st">"Health"</span>,</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">grepl</span>(<span class="st">"^Legal Affairs"</span>, Job_Category) <span class="sc">~</span> <span class="st">"Legal Affairs"</span>,</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">grepl</span>(<span class="st">"^Policy, Research &amp; Analysis"</span>, Job_Category) <span class="sc">~</span> <span class="st">"Policy, Research &amp; Analysis"</span>,</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">grepl</span>(<span class="st">"^Public Safety, Inspections, &amp; Enforcement"</span>, Job_Category) <span class="sc">~</span> <span class="st">"Public Safety, Inspections, &amp; Enforcement"</span>,</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">grepl</span>(<span class="st">"^Social Services"</span>, Job_Category) <span class="sc">~</span> <span class="st">"Social Services"</span>,</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">grepl</span>(<span class="st">"^Technology, Data &amp; Innovation"</span>, Job_Category) <span class="sc">~</span> <span class="st">"Technology, Data &amp; Innovation"</span>,</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> Job_Category <span class="co"># Default: keep original if no match</span></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>merged_category_counts <span class="ot">&lt;-</span> nyc_jobs <span class="sc">|&gt;</span> </span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Merged_Job_Category) <span class="sc">|&gt;</span> </span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Count))</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>merged_category_counts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 × 2
+   Merged_Job_Category                        Count
+   &lt;chr&gt;                                      &lt;int&gt;
+ 1 Engineering, Architecture, &amp; Planning       1883
+ 2 Legal Affairs                               1872
+ 3 Constituent Services &amp; Community Programs    927
+ 4 Health                                       843
+ 5 Public Safety, Inspections, &amp; Enforcement    729
+ 6 Social Services                              710
+ 7 Administration &amp; Human Resources             699
+ 8 Technology, Data &amp; Innovation                473
+ 9 Finance, Accounting, &amp; Procurement           379
+10 Building Operations &amp; Maintenance            333
+11 Policy, Research &amp; Analysis                  191
+12 Green Jobs                                   114
+13 Communications &amp; Intergovernmental Affairs   106</code></pre>
+</div>
+</div>
+<p>Now, we only have 13 distinct job categories, which would make later analysis much easier.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nyc_jobs, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Merged_Job_Category, Median_Salary, <span class="at">FUN =</span> median), </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> Median_Salary)) <span class="sc">+</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"summary"</span>, <span class="at">fun =</span> <span class="st">"median"</span>, <span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Median Salary by Merged Job Category"</span>,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Merged Job Category"</span>,</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Median Salary"</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_grey</span>() <span class="sc">+</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size=</span><span class="dv">8</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The bar chart shows the median salary for different merged job categories. Categories like “Technology, Data &amp; Innovation” has the highest median salaries, while categories like “Building Operations &amp; Maintenance” fall at the lowest end of the salary range. This suggest that salary has to do with specific job category people choose.</p>
+<section id="programming-language-vs.-salary-job-requiring-programming-languages-might-associate-with-higher-salary-salary-75000" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="programming-language-vs.-salary-job-requiring-programming-languages-might-associate-with-higher-salary-salary-75000"><span class="header-section-number">3.5.1</span> Programming Language vs.&nbsp;Salary: Job requiring programming languages might associate with higher salary (salary &gt;= $75,000)</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vcd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: grid</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Add Salary Category</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>nyc_jobs <span class="ot">&lt;-</span> nyc_jobs <span class="sc">|&gt;</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Salary_Category =</span> <span class="fu">if_else</span>(Median_Salary <span class="sc">&gt;=</span> <span class="dv">75000</span>, <span class="st">"&gt;=75000"</span>, <span class="st">"&lt;75000"</span>))</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>nyc_jobs <span class="ot">&lt;-</span> nyc_jobs <span class="sc">|&gt;</span> </span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Programming_Required =</span> <span class="fu">if_else</span>(any_programming_required, <span class="st">"Yes"</span>, <span class="st">"No"</span>))</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Create the mosaic plot</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>vcd<span class="sc">::</span><span class="fu">mosaic</span>( <span class="sc">~</span> Programming_Required <span class="sc">+</span> Salary_Category,</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> nyc_jobs,</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">direction =</span> <span class="fu">c</span>(<span class="st">"v"</span>, <span class="st">"h"</span>),</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">highlighting =</span> <span class="st">"Salary_Category"</span>,</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">highlighting_fill =</span> <span class="fu">c</span>(<span class="st">"skyblue"</span>, <span class="st">"orange"</span>),</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Mosaic Plot: Programming Knowledge vs Salary"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>salary_summary <span class="ot">&lt;-</span> nyc_jobs <span class="sc">|&gt;</span> </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Programming_Type =</span> <span class="fu">if_else</span>(</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    any_programming_required, <span class="st">"Required Programming"</span>, <span class="st">"No Programming Required"</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">|&gt;</span> </span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Programming_Type) <span class="sc">|&gt;</span> </span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Median_Salary =</span> <span class="fu">median</span>(Median_Salary, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(salary_summary, <span class="fu">aes</span>(<span class="at">x =</span> Programming_Type, <span class="at">y =</span> Median_Salary, <span class="at">fill =</span> Programming_Type)) <span class="sc">+</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Required Programming"</span> <span class="ot">=</span> <span class="st">"salmon"</span>, </span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"No Programming Required"</span> <span class="ot">=</span> <span class="st">"steelblue"</span>)) <span class="sc">+</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Median Salary by Programming Requirement"</span>,</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Programming Requirement"</span>,</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Median Salary"</span>,</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Programming Type"</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">0</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">14</span>)</span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="results_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The mosaic graph shows that salaries is clearly influenced by whether programming skills are required. Jobs requiring programming are more likely to offer higher salaries(salary &gt;= $75,000), while jobs that do not require programming tend to cluster around lower salary ranges(salary &lt; $75,000). This supports the conclusion that salary is dependent on knowing programming languages.</p>
+<p>The bar chart also confirm this idea as jobs not requiring programming languages has median salary below $70,000, while jobs that require programming languages has median salary about $78,000.</p>
+<p>This finding aligns with our earlier conclusion that “Technology, Data &amp; Innovation” has the highest median salaries</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -600,8 +1273,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./d3graph.html" class="pagination-link" aria-label="Interactive graph">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interactive graph</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./d3graph.html" class="pagination-link" aria-label="D3-based Interactive Graph">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">D3-based Interactive Graph</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -613,7 +1286,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions"><ul><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/edit/main/results.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/edit/main/results.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
 </div>
