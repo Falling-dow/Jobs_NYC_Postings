@@ -11,7 +11,7 @@ library(ggplot2)
 
 nyc_jobs <- read.csv("./Jobs_NYC_Postings.csv")
 
-# turn empty cells into NA
+# turn all the empty cells into NA
 nyc_jobs[nyc_jobs == ""] <- NA
 
 missing_counts <- colSums(is.na(nyc_jobs))
