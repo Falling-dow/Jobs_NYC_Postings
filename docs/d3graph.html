@@ -20,40 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -178,8 +144,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview-of-the-interactive-graph" id="toc-overview-of-the-interactive-graph" class="nav-link active" data-scroll-target="#overview-of-the-interactive-graph"><span class="header-section-number">4.1</span> Overview of the interactive graph</a></li>
+  <li><a href="#how-to-interact-with-the-graph" id="toc-how-to-interact-with-the-graph" class="nav-link" data-scroll-target="#how-to-interact-with-the-graph"><span class="header-section-number">4.2</span> How to interact with the graph</a></li>
+  <li><a href="#advantages-of-the-graph" id="toc-advantages-of-the-graph" class="nav-link" data-scroll-target="#advantages-of-the-graph"><span class="header-section-number">4.3</span> Advantages of the graph</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/edit/main/d3graph.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -338,31 +312,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <script src="scripts/myscript.js" defer=""></script>
 
 
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="st">This interactive graph is designed to help job seekers understand job market trends more clearly. The x-axis represents the months, while users can choose between the number of job postings or the average salary as the y-axis. These are two key factors that job seekers often care about the most.</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="st">To allow deeper insights, the graph includes five additional filter options: job category, career level, residency requirement, title classification, and whether programming skills are required. Users can select and combine any of these filters to see job count or salary trends for specific types of jobs over time.</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="st">Compared to traditional graphs, this version offers a more detailed and focused view of job trends. Users can switch between 2023 and 2024 data and use the five filter categories to refine the results further. By selecting one or multiple filter values, they can explore trends for particular job types.</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="st">The graph is also highly interactive: users can click on dropdown menus to filter data based on specific values, such as choosing certain job categories or career levels. By switching between the y-axis options, they can easily compare trends in job postings and salaries. Users can also move their cursor over any data point to view detailed information, such as the exact number of job postings or salary for that month. This interactivity makes it simple to explore and understand trends in a personalized way, helping job seekers pinpoint the information most relevant to their career goals."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-This interactive graph is designed to help job seekers understand job market trends more clearly. The x-axis represents the months, while users can choose between the number of job postings or the average salary as the y-axis. These are two key factors that job seekers often care about the most.
-
-To allow deeper insights, the graph includes five additional filter options: job category, career level, residency requirement, title classification, and whether programming skills are required. Users can select and combine any of these filters to see job count or salary trends for specific types of jobs over time.
-
-Compared to traditional graphs, this version offers a more detailed and focused view of job trends. Users can switch between 2023 and 2024 data and use the five filter categories to refine the results further. By selecting one or multiple filter values, they can explore trends for particular job types.
-
-The graph is also highly interactive: users can click on dropdown menus to filter data based on specific values, such as choosing certain job categories or career levels. By switching between the y-axis options, they can easily compare trends in job postings and salaries. Users can also move their cursor over any data point to view detailed information, such as the exact number of job postings or salary for that month. This interactivity makes it simple to explore and understand trends in a personalized way, helping job seekers pinpoint the information most relevant to their career goals.</code></pre>
-</div>
-</div>
+<section id="overview-of-the-interactive-graph" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="overview-of-the-interactive-graph"><span class="header-section-number">4.1</span> Overview of the interactive graph</h2>
+<p>This interactive graph is designed to help job seekers understand job market trends more clearly. The x-axis represents the months, while users can choose between the number of job postings or the average salary as the y-axis. These are two key factors that job seekers often care about the most.</p>
+<p>To allow deeper insights, the graph includes five additional filter options: job category, career level, residency requirement, title classification, and whether programming skills are required. Users can select and combine any of these filters to see job count or salary trends for specific types of jobs over time.</p>
+</section>
+<section id="how-to-interact-with-the-graph" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="how-to-interact-with-the-graph"><span class="header-section-number">4.2</span> How to interact with the graph</h2>
+<p>Users can click on dropdown menus to filter data based on specific values, such as choosing certain job categories or career levels. By switching between the y-axis options, they can easily compare trends in job postings and salaries. Users can also move their cursor over any data point to view detailed information, such as the exact number of job postings or salary for that month. This interactivity makes it simple to explore and understand trends in a personalized way, helping job seekers pinpoint the information most relevant to their career goals.</p>
+</section>
+<section id="advantages-of-the-graph" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="advantages-of-the-graph"><span class="header-section-number">4.3</span> Advantages of the graph</h2>
+<p>Compared to traditional graphs, this graph offers a more detailed and focused view of job trends. Users can switch between 2023 and 2024 data and use the five filter categories to refine the results further. By selecting one or multiple filter values, they can explore trends for particular job types they are interested in.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -805,7 +769,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions"><ul><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/edit/main/d3graph.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/edit/main/d3graph.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
 </div>

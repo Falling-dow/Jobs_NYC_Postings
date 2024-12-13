@@ -56,7 +56,7 @@ Potential challenges with the dataset include missing or incomplete values, whic
 ## Limitations and Future Directions  
 ### Limitations: 
 - **Geographical Scope**: The dataset is limited to NYC job postings, which may not represent broader trends in the U.S. 
-- **Time Frame**: The dataset primarily focuses on postings from 2024, limiting the ability to analyze historical trends.  
+- **Time Frame**: The dataset primarily focuses on postings from 2023 to 2024, limiting the ability to analyze historical trends.  
 
 ### Future Directions: 
 - **Expand Data Collection**: Incorporating job postings from previous years and other states could provide a more comprehensive view of job market trends. 
