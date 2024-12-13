@@ -28,5 +28,35 @@
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
     ]
+  },
+  {
+    "objectID": "d3graph.html",
+    "href": "d3graph.html",
+    "title": "4  Interactive Graph",
+    "section": "",
+    "text": "4.1 Overview of the interactive graph\nThis interactive graph is designed to help job seekers understand job market trends more clearly. The x-axis represents the months, while users can choose between the number of job postings or the average salary as the y-axis. These are two key factors that job seekers often care about the most.\nTo allow deeper insights, the graph includes five additional filter options: job category, career level, residency requirement, title classification, and whether programming skills are required. Users can select and combine any of these filters to see job count or salary trends for specific types of jobs over time.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Interactive Graph</span>"
+    ]
+  },
+  {
+    "objectID": "d3graph.html#how-to-interact-with-the-graph",
+    "href": "d3graph.html#how-to-interact-with-the-graph",
+    "title": "4  Interactive Graph",
+    "section": "4.2 How to interact with the graph",
+    "text": "4.2 How to interact with the graph\nUsers can click on dropdown menus to filter data based on specific values, such as choosing certain job categories or career levels. By switching between the y-axis options, they can easily compare trends in job postings and salaries. Users can also move their cursor over any data point to view detailed information, such as the exact number of job postings or salary for that month. This interactivity makes it simple to explore and understand trends in a personalized way, helping job seekers pinpoint the information most relevant to their career goals.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Interactive Graph</span>"
+    ]
+  },
+  {
+    "objectID": "d3graph.html#advantages-of-the-graph",
+    "href": "d3graph.html#advantages-of-the-graph",
+    "title": "4  Interactive Graph",
+    "section": "4.3 Advantages of the graph",
+    "text": "4.3 Advantages of the graph\nCompared to traditional graphs, this graph offers a more detailed and focused view of job trends. Users can switch between 2023 and 2024 data and use the five filter categories to refine the results further. By selecting one or multiple filter values, they can explore trends for particular job types they are interested in.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Interactive Graph</span>"
+    ]
   }
 ]

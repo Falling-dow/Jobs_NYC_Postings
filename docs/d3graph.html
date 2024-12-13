@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; Interactive graph – NYC_Job_Postings</title>
+<title>4&nbsp; Interactive Graph – NYC_Job_Postings</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -81,7 +81,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./d3graph.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interactive graph</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./d3graph.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interactive Graph</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -130,7 +130,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./d3graph.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interactive graph</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interactive Graph</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -144,15 +144,23 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview-of-the-interactive-graph" id="toc-overview-of-the-interactive-graph" class="nav-link active" data-scroll-target="#overview-of-the-interactive-graph"><span class="header-section-number">4.1</span> Overview of the interactive graph</a></li>
+  <li><a href="#how-to-interact-with-the-graph" id="toc-how-to-interact-with-the-graph" class="nav-link" data-scroll-target="#how-to-interact-with-the-graph"><span class="header-section-number">4.2</span> How to interact with the graph</a></li>
+  <li><a href="#advantages-of-the-graph" id="toc-advantages-of-the-graph" class="nav-link" data-scroll-target="#advantages-of-the-graph"><span class="header-section-number">4.3</span> Advantages of the graph</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/edit/main/d3graph.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interactive graph</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Interactive Graph</span></h1>
 </div>
 
 
@@ -169,18 +177,156 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<style>
-  * {
-    font-family: sans-serif;
-  }
-</style>
-<div id="plot">
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-<script src="scripts/myscript.js"></script>
 
 
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Job Posting Chart</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            flex: 1 1 calc(20% - 20px);
+            min-width: 150px;
+        }
+
+        .control-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        #plot {
+            width: 100%;
+            height: 500px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        #tooltip {
+            position: absolute;
+            background: white;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+            opacity: 0;
+            font-size: 12px;
+        }
+    </style>
+
+
+    <h1>Interactive Job Posting Chart</h1>
+
+    <div class="controls">
+        <!-- Year Selector -->
+        <div class="control-group">
+            <label for="year-select">Select Year:</label>
+            <select id="year-select"></select>
+        </div>
+
+        <!-- Y-axis Selector -->
+        <div class="control-group">
+            <label for="y-axis-select">Y-Axis Variable:</label>
+            <select id="y-axis-select">
+                <option value="job_count">Number of Job Postings</option>
+                <option value="median_salary">Median Salary</option>
+            </select>
+        </div>
+
+        <!-- Category Selectors -->
+        <div class="control-group">
+            <label for="category_merged_job_category">Job Category:</label>
+            <select id="category_merged_job_category">
+                <option value="N/A" selected="">N/A</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="category_Career_Level">Career Level:</label>
+            <select id="category_Career_Level">
+                <option value="N/A" selected="">N/A</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="category_any_programming_required">Programming Required:</label>
+            <select id="category_any_programming_required">
+                <option value="N/A" selected="">N/A</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="category_Residency_Requirement">Residency Requirement:</label>
+            <select id="category_Residency_Requirement">
+                <option value="N/A" selected="">N/A</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="category_Title_Classification">Title Classification:</label>
+            <select id="category_Title_Classification">
+                <option value="N/A" selected="">N/A</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Chart Container -->
+    <div id="plot"></div>
+    <div id="tooltip"></div>
+
+    <script src="scripts/myscript.js" defer=""></script>
+
+
+<section id="overview-of-the-interactive-graph" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="overview-of-the-interactive-graph"><span class="header-section-number">4.1</span> Overview of the interactive graph</h2>
+<p>This interactive graph is designed to help job seekers understand job market trends more clearly. The x-axis represents the months, while users can choose between the number of job postings or the average salary as the y-axis. These are two key factors that job seekers often care about the most.</p>
+<p>To allow deeper insights, the graph includes five additional filter options: job category, career level, residency requirement, title classification, and whether programming skills are required. Users can select and combine any of these filters to see job count or salary trends for specific types of jobs over time.</p>
+</section>
+<section id="how-to-interact-with-the-graph" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="how-to-interact-with-the-graph"><span class="header-section-number">4.2</span> How to interact with the graph</h2>
+<p>Users can click on dropdown menus to filter data based on specific values, such as choosing certain job categories or career levels. By switching between the y-axis options, they can easily compare trends in job postings and salaries. Users can also move their cursor over any data point to view detailed information, such as the exact number of job postings or salary for that month. This interactivity makes it simple to explore and understand trends in a personalized way, helping job seekers pinpoint the information most relevant to their career goals.</p>
+</section>
+<section id="advantages-of-the-graph" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="advantages-of-the-graph"><span class="header-section-number">4.3</span> Advantages of the graph</h2>
+<p>Compared to traditional graphs, this graph offers a more detailed and focused view of job trends. Users can switch between 2023 and 2024 data and use the five filter categories to refine the results further. By selecting one or multiple filter values, they can explore trends for particular job types they are interested in.</p>
+
+
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -623,7 +769,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions"><ul><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/edit/main/d3graph.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/edit/main/d3graph.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/Falling-dow/Jobs_NYC_Postings.git/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>This book was built with <a href="https://quarto.org/">Quarto</a>.</p>
 </div>
